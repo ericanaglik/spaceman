@@ -1,13 +1,13 @@
 import random
 import string
 
-blanks = []
-guessed_letters = []
+
+
 possible_letters = list(string.ascii_lowercase)
-guess = int('')
+#guess = int('')
 
 # template load word
-def load_word():
+def load_word(): # works
     f = open('words.txt', 'r')
     words_list = f.readlines()
     f.close()
@@ -16,69 +16,72 @@ def load_word():
     secret_word = random.choice(split_words_list)
     return secret_word
 
+def get_blank_word(secret_word, letters_guessed):  #letters_guessed is a list of the letters i guessed.
+    # String that stores blanks if letter is incorrect or blanks and correct letter if guess is correct
+    hidden_word = ""
+    for letter in secret_word:
+        if letter in letters_guessed:
+            hidden_word += letter + ""
+        else:
+            hidden_word += " _ "
+    return hidden_word
+
+def choices_available(letters_guessed):
+    choices = list("abcdefghijklmnopqrstuvwxyz")
+    for letter in letters_guessed:
+        if letter in choices:
+            # remive that letter in choices
+            choices.remove(letter)
+        else:
+            print("Please guess a single letter or a letter not guessed before")
+    return choices
+
+def is_secret_word_guessed(secret_word, letters_guessed):
+    for letter in secret_word:
+        if letter not in letters_guessed:
+            return False
+    return True
+
+
+
+
+
+
+
+"""
 # create user input
 def user_input(prompt):
     user_input = input(prompt)
     return user_input
+"""
 
 # multiply blanks by the length of secret word
-def create_blanks():
-    global secret_word
-    global blanks
-    blanks = list(' - ' * len(secret_word))
+
 
 # increments through each letter in the secret word. if the letter is equal to the user's guess, the blank at the index becomes the guess
 # if the letter is equal to the guess, letter found is true, otherwise, if it is false and the guess is appended to the guessed letters array
-def replace_letter(guess):
-    global secret_word
-    global blanks
-    global letter_found
-    letter_found = False
-    count = 0
-    for letter in secret_word:
-        if letter == guess:
-            letter_found = True
-            blanks[count] = guess
-        count += 1
-    if not letter_found:
-        guessed_letters.append(guess)
 
-# converts the list blanks and guessed letters into strings to be printed to the console
-def display():
-    global blanks
-    global guess
-    guess = 0
-    string_blanks = ""
-    string_guessed_letters = "Guessed letters: "
-    for i in blanks:
-        string_blanks = string_blanks + i
-    print(string_blanks)
 
-    for i in guessed_letters:
-        string_guessed_letters = string_guessed_letters + i + ' '
-    print(string_guessed_letters)
-    guess += 1
+
 
 
 def spaceman():
-    running = True
-    while running:
-        global secret_word
-        load_word()
-        input_letter = user_input("Please guess a letter: ")
-        if input_letter in possible_letters:
-            replace_letter(input_letter)
-            display()
-        else:
-            print("Please enter a single letter")
 
-def test():
-    create_blanks()
-    replace_letter("m")
-    replace_letter("x")
-    replace_letter("p")
-    display()
-    print(secret_word)
-    print(blanks)
 
-test()
+
+
+"""
+helper functions:
+
+
+
+
+ later developments:
+  - 7 lives
+  - ascii
+  - stretch: give the user after winning a choice to restart without turning off the terminal
+  - stretch: secret word phrase to give user option to guess full word.
+
+
+
+"""
