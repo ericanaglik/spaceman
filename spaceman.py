@@ -1,102 +1,97 @@
 import random
-
-
-def load_word():
+# template load word
+def load_word(): # works
     f = open('words.txt', 'r')
     words_list = f.readlines()
     f.close()
 
     split_words_list = words_list[0].split(' ')
     secret_word = random.choice(split_words_list)
-    print(secret_word)
-    return secret_word9
+    return secret_word
 
-def updateLetters():
-    shown_letters = list(secretWord)
-    hidden_letters = list("_" * len(shown_letters))
-    for i, item in enumerate(shown_letters):
-        for letters in guessed_letters:
-            if shown_letters[i] == letters:
-                hidden_letters[i] = letters
-    return (hidden_letters, shown_letters)
+def get_blank_word(secret_word, letters_guessed):  #letters_guessed is a list of the letters i guessed.
+    # String that stores blanks if letter is incorrect or blanks and correct letter if guess is correct
+    hidden_word = ""
+    for letter in secret_word:
+        if letter in letters_guessed:
+            hidden_word += letter + ""
+        else:
+            hidden_word += " _ "
+    return hidden_word
 
-def is_word_guessed(secret_word, letters_guessed):
-    '''
-    secretWord: string, the random word the user is trying to guess. This is selected on line 9.
-    lettersGuessed: list of letters that have been guessed so far.
-    returns: boolean, True only if all the letters of the secretWord are in lettersGuessed;
-    False otherwise
-    '''
-    secretWord = load_word()
-    lettersGuessed = list()
+def choices_available(letters_guessed):
+    choices = list("abcdefghijklmnopqrstuvwxyz")
+    for letter in letters_guessed:
+        if letter in choices:
+            # remive that letter in choices
+            choices.remove(letter)
+    return choices
 
-    if secretWord.find(lettersGuessed):
-        return True
+def is_secret_word_guessed(secret_word, letters_guessed):
+    """
+        Keep playing the game and check if the user wins
+
+    """
+    for letter in secret_word:
+        if letter not in letters_guessed:
+            return False
+    return True
+
+def spaceman_head():
+    print(" o ")
+
+def draw_spaceman(guess):
+
+    if guess == 1:
+        spaceman_head()
+    elif guess == 2:
+        spaceman_head()
+        print(" | ")
+    elif guess == 3:
+        spaceman_head()
+        print("/| ")
+    elif guess == 4:
+        spaceman_head()
+        print("/|\\")
+    elif guess == 5:
+        spaceman_head()
+        print("/|\\")
+        print("/ ")
+    elif guess == 6:
+        spaceman_head()
+        print("/|\\")
+        print("/ \\")
+
+def spaceman():
+    # get a secret_word
+    secret_word = str(load_word())
+    # an empty list for letters_guessed
+    letters_guessed = []
+    # ask a user for a letter to guess
+    guess = 0
+    while not is_secret_word_guessed(secret_word, letters_guessed) and guess != 7:
+        print("The word to guess is {} .".format(get_blank_word(secret_word, letters_guessed)))
+        user_guess = input("Please guess a letter \n -> ")
+        if user_guess not in letters_guessed:
+            letters_guessed.append(user_guess)
+            choices_available(letters_guessed)
+            #print("Guessed letters: {} ").format(str(letters_guessed) + " ")
+            if user_guess not in secret_word:
+                guess += 1
+                draw_spaceman(guess)
+            # elif is_secret_word_guessed(secret_word, letters_guessed) == true:
+            #     print("you won!")
+        else:
+            print('guess another letter...')
+    # elif is_secret_word_guessed(secret_word, letters_guessed) == true:
+    #     # when they win what do you want them to say
+    #     print('you won')
     else:
-        return False
+        if is_secret_word_guessed(secret_word, letters_guessed) == True:
+            print("you won!")
+        elif is_secret_word_guessed(secret_word, letters_guessed) == False:
+            print("you lost!")
 
 
 
-
-# def get_guessed_word(secret_Word, letters_guessed):
-#     '''
-#     secretWord: string, the random word the user is trying to guess. This is selected on line 9.
-#     lettersGuessed: list of letters that have been guessed so far.
-#     returns: String, of letters and underscores. For letters in the word that the user has guessed correctly, the string should contain the letter at the correct position. For letters
-#     in the word that the user has not yet guessed, show an _ (underscore) instead.
-#     '''
-#
-#     scrambledWord = "_" * len(load_word())
-#
-#     if
-
-
-    # FILL IN YOUR CODE HERE...
-
-def spaceman(secret_word):
-    '''
-    secretWord: String, the secret word to guess.
-
-    Starts up a game of Spaceman in the command line.
-
-    * At the start of the game, let the user know how many letters the secretWord contains.
-
-    * Ask the user to guess one letter per round.
-
-    * The user should receive feedback immediately after each guess about whether their guess appears in the computer's word.
-
-    * After each round, you should also display to the user the partially guessed word so far, as well as the letters that the user has not yet guessed.
-    '''
-
-    # FILL IN YOUR CODE HERE...
-
-
-secret_word = load_word()
-spaceman(load_word())
-
-
-
-
-secretWord = load_word()
-
-
-from turtle import *
-
-
-secretWord = "please"
-
-def secretWordHidden():
-    hiddenWord = list()
-    hiddenWord.append(len(secretWord) * "_")
-    return hiddenWord()
-
-color('red', 'yellow')
-write("please god", font=("Arial", 16, "normal"))
-begin_fill()
-while True:
-    forward(200)
-    left(170)
-    if abs(pos()) < 1:
-        break
-end_fill()
-done()
+spaceman()
